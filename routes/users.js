@@ -6,7 +6,7 @@ const {
   usuariosPost,
   usuariosDelete,
 } = require("../controllers/users");
-const { esRoleValido } = require("../helpers/db-validators");
+const { esRoleValido, emaiExiste } = require("../helpers/db-validators");
 const { validarCampos } = require("../middlewares/validar-campos");
 const router = Router();
 
@@ -21,7 +21,8 @@ router.post(
     check("password", "El password debe tener al menos 6 caracteres").isLength({
       min: 6,
     }),
-    check("correo", "El correo no es válido").isEmail(),
+    check("correo").custom(emaiExiste),
+    //check("correo", "El correo no es válido").isEmail(),
     //check("rol", "No es un rol válido").isIn(["ADMIN_ROLE", "USER_ROLE"]),
     check("rol").custom(esRoleValido),
     validarCampos,
