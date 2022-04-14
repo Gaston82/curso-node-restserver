@@ -6,13 +6,25 @@ const {
   usuariosPost,
   usuariosDelete,
 } = require("../controllers/users");
-const { esRoleValido, emaiExiste } = require("../helpers/db-validators");
+const {
+  esRoleValido,
+  emaiExiste,
+  existeUsuarioPorId,
+} = require("../helpers/db-validators");
 const { validarCampos } = require("../middlewares/validar-campos");
 const router = Router();
 
 router.get("/", usuariosGet);
 
-router.put("/:id", usuariosPut);
+router.put(
+  "/:id",
+  //comprobamos que sea un id válido(de mongodb)
+  [check("id", "No es un id válido").isMongoId(), validarCampos],
+  check("id").custom(existeUsuarioPorId),
+  check("rol").custom(esRoleValido),
+  validarCampos,
+  usuariosPut
+);
 
 router.post(
   "/",
