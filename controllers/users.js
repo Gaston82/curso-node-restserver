@@ -55,10 +55,14 @@ const usuariosPost = async (req, res) => {
   });
 };
 
-const usuariosDelete = (req, res) => {
-  res.json({
-    msg: "delete API - controller",
-  });
+const usuariosDelete = async (req, res) => {
+  const { id } = req.params;
+
+  //Físicamente lo borramos
+
+  //const usuario = await Usuario.findByIdAndDelete(id);
+  const usuario = await Usuario.findByIdAndUpdate(id, { estado: false });
+  res.json(usuario);
 };
 
 module.exports = {
