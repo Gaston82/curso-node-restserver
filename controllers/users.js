@@ -8,10 +8,18 @@ const Usuario = require("../models/usuario");
 const usuariosGet = async (req = request, res = response) => {
   // const { q, name, apikey, page = 1, limit } = req.query;
   const { limite = 5, desde = 0 } = req.query;
-  const usuarios = await Usuario.find()
-    .limit(Number(limite))
-    .skip(Number(desde));
+  const query = { estado: true };
+  // const usuarios = await Usuario.find(query)
+  //   .limit(Number(limite))
+  //   .skip(Number(desde));
+
+  // const total = await Usuario.countDocuments();
+  const [usuarios, total] = await Promise.all([
+    Usuario.find(query).limit(Number(limite)).skip(Number(desde)),
+    Usuario.countDocuments(query),
+  ]);
   res.json({
+    total,
     usuarios,
   });
 };
