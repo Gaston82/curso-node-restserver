@@ -5,15 +5,14 @@ const { validarCampos } = require("../middlewares/validar-campos");
 
 const Usuario = require("../models/usuario");
 
-const usuariosGet = (req = request, res = response) => {
-  const { q, name, apikey, page = 1, limit } = req.query;
+const usuariosGet = async (req = request, res = response) => {
+  // const { q, name, apikey, page = 1, limit } = req.query;
+  const { limite = 5, desde = 0 } = req.query;
+  const usuarios = await Usuario.find()
+    .limit(Number(limite))
+    .skip(Number(desde));
   res.json({
-    msg: "get API - controlador",
-    q,
-    name,
-    apikey,
-    page,
-    limit,
+    usuarios,
   });
 };
 
@@ -30,10 +29,7 @@ const usuariosPut = async (req, res) => {
   }
   const usuario = await Usuario.findByIdAndUpdate(id, resto);
 
-  res.json({
-    msg: "put API - controller",
-    usuario,
-  });
+  res.json(usuario);
 };
 
 const usuariosPost = async (req, res) => {
