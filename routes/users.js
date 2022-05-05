@@ -13,7 +13,7 @@ const {
 } = require("../helpers/db-validators");
 const { validarCampos } = require("../middlewares/validar-campos");
 const { validarJWT } = require("../middlewares/validar-jwt");
-const { esAdminRol } = require("../middlewares/validar-roles");
+const { esAdminRol, tieneRole } = require("../middlewares/validar-roles");
 const router = Router();
 
 router.get("/", usuariosGet);
@@ -48,7 +48,10 @@ router.delete(
   "/:id",
   [
     validarJWT,
-    esAdminRol,
+    //Valida cualquiera de los roles que pase por parámetro
+    tieneRole("ADMIN_ROLE", "VENTAS_ROLE"),
+    //Valida que el rol del usuario sea el de administrador
+    // esAdminRol,
     check("id", "No es un id válido").isMongoId(),
     check("id").custom(existeUsuarioPorId),
     validarCampos,
