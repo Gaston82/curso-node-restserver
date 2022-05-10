@@ -4,16 +4,24 @@ const { validarJWT, validarCampos } = require("../middlewares");
 const {
   crearCategoria,
   obtenerCategorias,
+  obtenerCategoria,
 } = require("../controllers/categorias");
+const { existeCategoriaPorId } = require("../helpers/db-validators");
 const router = Router();
 
 //Obtener todas las categorías - ruta pública
 router.get("/", obtenerCategorias);
 
 //Obtener una categoría por id - ruta pública
-router.get("/:id", (req, res) => {
-  res.json("get");
-});
+router.get(
+  "/:id",
+  [
+    check("id", "No es un id de Mongo válido").isMongoId(),
+    check("id").custom(existeCategoriaPorId),
+    validarCampos,
+  ],
+  obtenerCategoria
+);
 
 //Crear categoría  - ruta privada - Cualquier persona con un token válido
 router.post(

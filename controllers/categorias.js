@@ -21,6 +21,14 @@ const obtenerCategorias = async (req, res = response) => {
   });
 };
 //obtenerCategoría - populate {}
+
+const obtenerCategoria = async (req, res = response) => {
+  const { id } = req.params;
+  const categoria = await Categoria.findById(id).populate("usuario", "nombre");
+
+  res.json(categoria);
+};
+
 const crearCategoria = async (req, res = response) => {
   //Guarda el nombre de la categoría en mayúsculas
   const nombre = req.body.nombre.toUpperCase();
@@ -54,4 +62,5 @@ const crearCategoria = async (req, res = response) => {
 module.exports = {
   crearCategoria,
   obtenerCategorias,
+  obtenerCategoria,
 };
