@@ -1,9 +1,10 @@
 const { Schema, model } = require("mongoose");
 
 const CategoriaSchema = Schema({
-  rol: {
+  nombre: {
     type: String,
     required: [true, "El nombre es obligatorio"],
+    unique: true,
   },
   estado: {
     type: Boolean,
@@ -18,4 +19,4 @@ const CategoriaSchema = Schema({
   },
 });
 
-module.exports = model("Role", CategoriaSchema);
+module.exports = model("Categoria", CategoriaSchema);
